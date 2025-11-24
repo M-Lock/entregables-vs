@@ -27,4 +27,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: mlock356/containervs:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/containervs:latest
