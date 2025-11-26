@@ -24,7 +24,7 @@ jobs:
       - name: Build and push image #Construye la imagen y realiza un push
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./ejercicio-2
           file: ./ejercicio-2/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/containervs:latest
