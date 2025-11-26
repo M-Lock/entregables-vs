@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal-deployment
+spec:
+  selector:
+    matchLabels:
+      app: web-drupal
+  template:
+    metadata:
+      labels: 
+        app: web-drupal
+    spec:
+      initContainers:  
+      - name: init-sites-volume
+        image: drupal:latest
+        command: ['sh', '-c', 'mkdir -p /data && cp -a /var/www/html/sites/. /data && chown -R www-data:www-data /data']
+        #lanzamos un shell en el contanedor y le indicamos que vamos a ejecutar una string con comandos (-sh, -c). mkdir -p crea el fichero
+        #/data si no existe y cp -a copia en data todo lo que hay en /var/www/html/sites/. Por útlimo, chown -R permite modificar los permisos
+        #  de /data para que el proceso web pueda leer y escribir, necesario para que drupal pueda funcionar
+        volumeMounts:
+        - name: drupal-init-volume #debe coincidir con el nombre que le damos en el apartado volumes, no con el nombre del volumen en su propio archivo
+          mountPath: /data  
+      containers:
+      - name: drupal
+        image: drupal:latest
+        ports:
+          - containerPort: 80
+        volumeMounts: #definimos donde se montan los volumenes
+          - name: drupal-volume #tienen que compartir nombre con el/los volumenes que definimos
+            mountPath: /var/www/html/modules
+            subPath: modules #gracias a esto, podemos usar el mismo volumen para varios directorios, dado que aisla en directorios
+            #propios del volumen la información de los directorios a mantener, aislados del resto
+          - name: drupal-volume
+            mountPath: /var/www/html/profiles
+            subPath: profiles
+          - name: drupal-volume
+            mountPath: /var/www/html/themes
+            subPath: themes
+          - name: drupal-init-volume  #necesitamos ponerlo para que se guarden los datos en él
+            mountPath: /var/www/html/sites
+      volumes: #enlazamos el volumen con el deployment
+      - name: drupal-volume
+        persistentVolumeClaim:
+          claimName: drupal-pvc
+      - name: drupal-init-volume
+        persistentVolumeClaim:
+          claimName: drupal-sitespvc

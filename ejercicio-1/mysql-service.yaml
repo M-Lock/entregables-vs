@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  type: ClusterIP #Ponemos esto para solo poder acceder desde dentro del cluster
+  selector:
+    app: web-mysql #el mismo nombre qeu usamos en app de deployment
+  ports:
+    - name: http
+      port: 3306
+      targetPort: 3306

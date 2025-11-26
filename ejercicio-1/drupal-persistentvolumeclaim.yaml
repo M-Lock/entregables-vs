@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: drupal-pvc
+spec:
+  accessModes: #modo de acceso al volumen
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi #tamaño del volumen
