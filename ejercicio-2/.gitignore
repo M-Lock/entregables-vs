@@ -1,0 +1,25 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+terraform.tfvars
+override.tf
+override.tf.json
+.terraform.lock.hcl
+
+# Provider plugins / binaries
+terraform/.terraform/
+
+# Docker
+**/node_modules/
+**/.env
+**/.docker
+**/docker-compose.override.yml
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# VSCode
+.vscode/
