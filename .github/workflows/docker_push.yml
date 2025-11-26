@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository #Me mueve a la rama en la que ocurre el checkout, si no existe la crea
+      - name: Checkout repository #Nos colocamos ena la rama en la que ocurre el checkout, si no existe la crea
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx #Construye el contenedor a partir de la información del dockerfile del repositorio
@@ -24,7 +24,8 @@ jobs:
       - name: Build and push image #Construye la imagen y realiza un push
         uses: docker/build-push-action@v5
         with:
-          context: ./ejercicio-2
-          file: ./ejercicio-2/Dockerfile
+          context: ./ejercicio-2 #Indicamos el directorio donde el daemon de Docker tratará de construir la imagen. 
+          file: ./ejercicio-2/Dockerfile #Dentro del contexto, le indicamos el fichero a utilizar para construir la imagen.
+          #IMPORTANTE: todos los ficheros que utilice Dockerfile, deben tener su ruta puesta en relación al mismo.
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/containervs:latest
